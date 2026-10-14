@@ -24,3 +24,18 @@ function roll(i) {
     if (count > 20) clearInterval(spin);
   }, 30);
 }
+// Rows that have a human option: Base, Head, Torso, Legs, Arms, Coat, Extra From
+const humanSlots = [0, 1, 2, 3, 4, 6, 8];
+
+function rollAll() {
+  const results = lists.map(list => list[Math.floor(Math.random() * list.length)]);
+
+  const hasHuman = results.some(r => r.toLowerCase().includes("human"));
+  if (!hasHuman) {
+    const slot = humanSlots[Math.floor(Math.random() * humanSlots.length)];
+    const humanOptions = lists[slot].filter(x => x.toLowerCase().includes("human"));
+    results[slot] = humanOptions[Math.floor(Math.random() * humanOptions.length)];
+  }
+
+  results.forEach((r, i) => document.getElementById("num" + i).textContent = r);
+}
