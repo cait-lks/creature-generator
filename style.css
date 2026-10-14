@@ -1,0 +1,4 @@
+body { font-family: sans-serif; text-align: left; background: #f4f0ff; }
+.row { margin: 10px; }
+button { padding: 8px 16px; border-radius: 8px; border: none; background: #8a6cff; color: white; cursor: pointer; }
+span { margin-left: 12px; font-weight: bold; }
