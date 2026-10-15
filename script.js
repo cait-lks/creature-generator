@@ -15,27 +15,44 @@ const size = ["Extra Small", "Small", "Medium", "Large", "Extra Large"];
 const lists = [base, head, torso, legs, arms, colour, coat, extra, extraSelect, size];
 
 function roll(i) {
-  const list = lists[i];
   const output = document.getElementById("num" + i);
   let count = 0;
   const spin = setInterval(() => {
-    output.textContent = list[Math.floor(Math.random() * list.length)];
+    output.textContent = randomFrom(lists[i]);
     count++;
-    if (count > 20) clearInterval(spin);
+     if (count > 20) {
+      clearInterval(spin);
+      output.textContent = pick(i);
+    }
   }, 30);
 }
 // Rows that have a human option: Base, Head, Torso, Legs, Arms, Coat, Extra From
 const humanSlots = [0, 1, 2, 3, 4, 6, 8];
 
+const HUMAN_CHANCE = 0.6; // 60% chance each human row picks a human option
+const MIN_HUMAN = 3; // every creature gets at least 3 human parts
+
+function randomFrom(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+function humanOptions(i) {
+  return lists[i].filter(x => x.toLowerCase().includes("human"));
+}
+function pick(i) {
+ if (humanSlots.includes(i) && Math.random() < HUMAN_CHANCE) {
+   return randomFrom(humanOptions(i));
+ }
+  return randomFrom(lists[i]);
+}
 function rollAll() {
-  const results = lists.map(list => list[Math.floor(Math.random() * list.length)]);
+  const results = lists.map((_, i) => pick(i));
 
-  const hasHuman = results.some(r => r.toLowerCase().includes("human"));
-  if (!hasHuman) {
-    const slot = humanSlots[Math.floor(Math.random() * humanSlots.length)];
-    const humanOptions = lists[slot].filter(x => x.toLowerCase().includes("human"));
-    results[slot] = humanOptions[Math.floor(Math.random() * humanOptions.length)];
-  }
-
+  let nonHuman = humanSlots.filter(i => !results[i].toLowerCase().includes("human"));
+  while (humanSlots.length - nonHuman.length < MIN_HUMAN) {
+    const slot = randomFrom(nonHuman);
+    result[slots] = randomFrom(humanOptions(slot));
+    nonHuman = nonHuman.filter(i => i !== slot);
+}
   results.forEach((r, i) => document.getElementById("num" + i).textContent = r);
 }
+ 
